@@ -21,7 +21,7 @@
     <div class="task-actions">
       <button *ngIf="editingTaskId !== task.id" (click)="startEditing(task)">✎</button>
       <button (click)="removeTask(task.id)">🗑</button>
-      <button (click)="toggleComplete(task.id)">✓</button>
+      
     </div>
   </li>
 </ul>
