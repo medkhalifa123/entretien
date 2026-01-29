@@ -1,17 +1,15 @@
 <ul class="task-list">
   <li *ngFor="let task of tasks$ | async" class="task-item">
-    <!-- Affichage normal -->
     <div *ngIf="editingTaskId !== task.id">
-      <strong [style.text-decoration]="task.completed ? 'line-through' : 'none'">
-        {{ task.title }}
-      </strong>
-      <span>(Priorité: {{ task.priority }})</span>
-      <p *ngIf="task.description">{{ task.description }}</p>
+      <div class="task-title">
+        <strong [class.completed]="task.completed">{{ task.title }}</strong>
+        <span class="priority">Priorité: {{ task.priority }}</span>
+      </div>
+      <p *ngIf="task.description" class="description">{{ task.description }}</p>
       <small>Échéance: {{ task.dueDate | date:'shortDate' }}</small>
     </div>
 
-    <!-- Formulaire d'édition -->
-    <div *ngIf="editingTaskId === task.id">
+    <div *ngIf="editingTaskId === task.id" class="edit-form">
       <input [(ngModel)]="editedTitle" placeholder="Titre" />
       <input [(ngModel)]="editedDescription" placeholder="Description" />
       <input type="number" [(ngModel)]="editedPriority" min="1" max="5" />
@@ -20,10 +18,10 @@
       <button (click)="cancelEdit()">✕</button>
     </div>
 
-    <!-- Actions toujours visibles -->
     <div class="task-actions">
       <button *ngIf="editingTaskId !== task.id" (click)="startEditing(task)">✎</button>
       <button (click)="removeTask(task.id)">🗑</button>
+      <button (click)="toggleComplete(task.id)">✓</button>
     </div>
   </li>
 </ul>
@@ -32,23 +30,87 @@
 .task-list {
   list-style: none;
   padding: 0;
+  max-width: 600px;
+  margin: 20px auto;
 }
 
 .task-item {
+  background-color: #fff;
+  margin-bottom: 12px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+}
+
+.task-title {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.task-title .completed {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.priority {
+  background-color: #74ebd5;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.description {
+  margin: 5px 0;
+  color: #555;
 }
 
 .task-actions {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .task-actions button {
-  margin-right: 5px;
+  margin-right: 8px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.task-actions button:hover {
+  background-color: #74ebd5;
+  color: #fff;
+}
+
+.edit-form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.edit-form button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #74ebd5;
+  color: #fff;
+}
+
+.edit-form button:hover {
+  background-color: #57c6bf;
 }
 </style>
