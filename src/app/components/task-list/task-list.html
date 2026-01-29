@@ -1,0 +1,54 @@
+<ul class="task-list">
+  <li *ngFor="let task of tasks$ | async" class="task-item">
+    <!-- Affichage normal -->
+    <div *ngIf="editingTaskId !== task.id">
+      <strong [style.text-decoration]="task.completed ? 'line-through' : 'none'">
+        {{ task.title }}
+      </strong>
+      <span>(Priorité: {{ task.priority }})</span>
+      <p *ngIf="task.description">{{ task.description }}</p>
+      <small>Échéance: {{ task.dueDate | date:'shortDate' }}</small>
+    </div>
+
+    <!-- Formulaire d'édition -->
+    <div *ngIf="editingTaskId === task.id">
+      <input [(ngModel)]="editedTitle" placeholder="Titre" />
+      <input [(ngModel)]="editedDescription" placeholder="Description" />
+      <input type="number" [(ngModel)]="editedPriority" min="1" max="5" />
+      <input type="date" [(ngModel)]="editedDueDate" />
+      <button (click)="saveTask()">💾</button>
+      <button (click)="cancelEdit()">✕</button>
+    </div>
+
+    <!-- Actions toujours visibles -->
+    <div class="task-actions">
+      <button *ngIf="editingTaskId !== task.id" (click)="startEditing(task)">✎</button>
+      <button (click)="removeTask(task.id)">🗑</button>
+    </div>
+  </li>
+</ul>
+
+<style>
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.task-actions {
+  margin-top: 5px;
+}
+
+.task-actions button {
+  margin-right: 5px;
+  cursor: pointer;
+}
+</style>

@@ -1,0 +1,12 @@
+<div *ngIf="isLoggedIn$ | async; else loginBlock">
+  <p>Connecté en tant que: {{ email$ | async }}</p>
+
+  <app-task-form (taskAdded)="addNewTask($event)"></app-task-form>
+  <app-task-list></app-task-list>
+
+  <button (click)="logoutUser()">Se déconnecter</button>
+</div>
+
+<ng-template #loginBlock>
+  <app-login></app-login>
+</ng-template>
